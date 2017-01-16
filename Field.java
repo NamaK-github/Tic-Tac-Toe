@@ -93,113 +93,94 @@ public class Field extends JPanel {
 
     public void aiTurn() {
         if (gameOver) return;
-        int x = -1;
-        int y = -1;
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map.length; j++) {
-                if (setSymbol(i,j,PLAYER2_SYMBOL)){
-                    if (checkWin(PLAYER2_SYMBOL)){
+                if (setSymbol(i, j, PLAYER2_SYMBOL)) {
+                    if (checkWin(PLAYER2_SYMBOL)) {
                         repaint();
                         return;
                     }
-                    map[i][j]=EMPTY;
+                    map[i][j] = EMPTY;
                 }
             }
-
         }
-        boolean b=false;
-        switch (think(playerX,playerY)){
-            case 0:{
-                y=playerY;
-                if (playerX-2<0) {
-                    x=-1;
+        boolean b = false;
+        int vectorPlus = 0;
+        int vectorMinus = 0;
+        switch (think(playerX, playerY)) {
+            case 0: {
+                do {
+                    if (map[playerX + vectorPlus][playerY] == EMPTY) break;
+                    vectorPlus++;
+                } while ((playerX + vectorPlus) != map.length);
+                do {
+                    if (map[playerX - vectorMinus][playerY] == EMPTY) break;
+                    vectorMinus++;
+                } while ((playerX - vectorMinus) != -1);
+                if (vectorPlus > vectorMinus && playerX - vectorMinus >= 0) {
+                    b = setSymbol(playerX - vectorMinus, playerY, PLAYER2_SYMBOL);
                 } else {
-                    x=playerX-2;
+                    b = setSymbol(playerX + vectorPlus, playerY, PLAYER2_SYMBOL);
                 }
-                b = true;
-                do{
-                    x++;
-                    if (x==map.length){
-                        b = false;
-                        break;
-                    }
-                } while (!setSymbol(x,y,PLAYER2_SYMBOL));
                 break;
             }
-            case 1:{
-                x=playerX;
-                if (playerY-2<0) {
-                    y=-1;
+            case 1: {
+                do {
+                    if (map[playerX][playerY + vectorPlus] == EMPTY) break;
+                    vectorPlus++;
+                } while ((playerY + vectorPlus) != map.length);
+                do {
+                    if (map[playerX][playerY - vectorMinus] == EMPTY) break;
+                    vectorMinus++;
+                } while ((playerY - vectorMinus) != -1);
+                if (vectorPlus > vectorMinus && playerY - vectorMinus >= 0) {
+                    b = setSymbol(playerX, playerY - vectorMinus, PLAYER2_SYMBOL);
                 } else {
-                    y=playerY-2;
+                    b = setSymbol(playerX, playerY + vectorPlus, PLAYER2_SYMBOL);
                 }
-                b = true;
-                do{
-                    y++;
-                    if (y==map.length){
-                        b = false;
-                        break;
-                    }
-                } while (!setSymbol(x,y,PLAYER2_SYMBOL));
                 break;
             }
-            case 2:{
-                if (playerX-2<0) {
-                    x=-1;
+            case 2: {
+                do {
+                    if (map[playerX + vectorPlus][playerY + vectorPlus] == EMPTY) break;
+                    vectorPlus++;
+                } while ((playerX + vectorPlus) != map.length && (playerY + vectorPlus) != map.length);
+                do {
+                    if (map[playerX - vectorMinus][playerY - vectorMinus] == EMPTY) break;
+                    vectorMinus++;
+                } while ((playerX - vectorMinus) != -1 && (playerY - vectorMinus) != -1);
+                if (vectorPlus > vectorMinus && playerX - vectorMinus >= 0 && playerY - vectorMinus >= 0) {
+                    b = setSymbol(playerX - vectorMinus, playerY - vectorMinus, PLAYER2_SYMBOL);
                 } else {
-                    x=playerX-2;
+                    b = setSymbol(playerX + vectorPlus, playerY + vectorPlus, PLAYER2_SYMBOL);
                 }
-                if (playerY-2<0) {
-                    y=-1;
-                } else {
-                    y=playerY-2;
-                }
-                b = true;
-                do{
-                    x++;
-                    y++;
-                    if (x==map.length || y==map.length){
-                        b = false;
-                        break;
-                    }
-                } while (!setSymbol(x,y,PLAYER2_SYMBOL));
                 break;
             }
-            case 3:{
-                if (playerX-2<0) {
-                    x=-1;
+            case 3: {
+                do {
+                    if (map[playerX + vectorPlus][playerY - vectorPlus] == EMPTY) break;
+                    vectorPlus++;
+                } while ((playerX + vectorPlus) != map.length && (playerY - vectorPlus) != -1);
+                do {
+                    if (map[playerX - vectorMinus][playerY + vectorMinus] == EMPTY) break;
+                    vectorMinus++;
+                } while ((playerX - vectorMinus) != -1 && (playerY + vectorMinus) != map.length);
+                if (vectorPlus > vectorMinus && playerX - vectorMinus >= 0 && playerY + vectorMinus < map.length) {
+                    b = setSymbol(playerX - vectorMinus, playerY + vectorMinus, PLAYER2_SYMBOL);
                 } else {
-                    x=playerX-2;
+                    b = setSymbol(playerX + vectorPlus, playerY - vectorPlus, PLAYER2_SYMBOL);
                 }
-                if (playerY+2>map.length) {
-                    y=linesCount;
-                } else {
-                    y=playerY+2;
-                }
-                b = true;
-                do{
-                    x++;
-                    y--;
-                    if (x==map.length || y==0){
-                        b = false;
-                        break;
-                    }
-                } while (!setSymbol(x,y,PLAYER2_SYMBOL));
                 break;
             }
-            default:{
-                do{
-                    y = rnd.nextInt(linesCount);
-                    x = rnd.nextInt(linesCount);
-                } while (!setSymbol(x,y,PLAYER2_SYMBOL));
+            default: {
+                do {
+                } while (!setSymbol(rnd.nextInt(linesCount), rnd.nextInt(linesCount), PLAYER2_SYMBOL));
                 break;
             }
         }
-        if (!b){
-            do{
-                y = rnd.nextInt(linesCount);
-                x = rnd.nextInt(linesCount);
-            } while (!setSymbol(x,y,PLAYER2_SYMBOL));
+        if (!b) {
+            do {
+            } while (!setSymbol(rnd.nextInt(linesCount), rnd.nextInt(linesCount), PLAYER2_SYMBOL));
         }
         repaint();
         isMapFull();
@@ -208,38 +189,51 @@ public class Field extends JPanel {
 
     public int think(int x, int y) {
         int[] lines = new int[4];
+        int[] linesLenght = new int[4];
         int turnLine = 0;
         int max = 0;
         for (int i = 0; i < map.length; i++) {
             if (map[x][i] == PLAYER1_SYMBOL) {
                 lines[1]++;
             }
+            linesLenght[1] = map.length;
             if (map[i][y] == PLAYER1_SYMBOL) {
                 lines[0]++;
             }
+            linesLenght[0] = map.length;
             if ((x + i) < map.length && (y + i) < map.length) {
                 if (map[x + i][y + i] == PLAYER1_SYMBOL) {
                     lines[2]++;
                 }
+                linesLenght[2]++;
             }
             if ((x - i) >= 0 && (y - i) >= 0) {
                 if (map[x - i][y - i] == PLAYER1_SYMBOL) {
-                    if (i!=0) lines[2]++;
+                    if (i != 0) {
+                        lines[2]++;
+                    }
                 }
+                linesLenght[2]++;
             }
-            if ((x + i) < map.length && (y - i) >=0) {
+            if ((x + i) < map.length && (y - i) >= 0) {
                 if (map[x + i][y - i] == PLAYER1_SYMBOL) {
                     lines[3]++;
                 }
+                linesLenght[3]++;
             }
             if ((x - i) >= 0 && (y + i) < map.length) {
                 if (map[x - i][y + i] == PLAYER1_SYMBOL) {
-                    if (i!=0) lines[3]++;
+                    if (i != 0) {
+                        lines[3]++;
+                    }
                 }
+                linesLenght[3]++;
             }
         }
+        linesLenght[2]--;
+        linesLenght[3]--;
         for (int i = 0; i < 4; i++) {
-            if (lines[i] >= max) {
+            if (lines[i] >= max && lines[i] != linesLenght[i]) {
                 max = lines[i];
                 turnLine = i;
             }
