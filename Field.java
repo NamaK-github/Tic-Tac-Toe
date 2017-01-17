@@ -179,6 +179,11 @@ public class Field extends JPanel {
                             x = playerX - i;
                             y = playerY - i;
                             if (x < 0 || y < 0) break;
+                            if (map[x][y]==EMPTY){
+                                x--;
+                                y--;
+                                break;
+                            }
                         }
                         do {
                             x++;
@@ -215,6 +220,11 @@ public class Field extends JPanel {
                             x = playerX - i;
                             y = playerY + i;
                             if (x < 0 || y == map.length) break;
+                            if (map[x][y]==EMPTY){
+                                x--;
+                                y++;
+                                break;
+                            }
                         }
                         do {
                             x++;
@@ -233,12 +243,14 @@ public class Field extends JPanel {
                 break;
             }
             default: {
-                setSymbol(rnd.nextInt(linesCount), rnd.nextInt(linesCount), PLAYER2_SYMBOL);
+                do {
+                } while (!setSymbol(rnd.nextInt(linesCount), rnd.nextInt(linesCount), PLAYER2_SYMBOL));
                 break;
             }
         }
         if (!b) {
-            setSymbol(rnd.nextInt(linesCount), rnd.nextInt(linesCount), PLAYER2_SYMBOL);
+            do {
+            } while (!setSymbol(rnd.nextInt(linesCount), rnd.nextInt(linesCount), PLAYER2_SYMBOL));
         }
         repaint();
         isMapFull();
