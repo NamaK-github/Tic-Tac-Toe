@@ -119,7 +119,8 @@ public class Field extends JPanel {
                 } while ((playerX - vectorMinus) != -1);
                 if (vectorPlus > vectorMinus && playerX - vectorMinus >= 0) {
                     b = setSymbol(playerX - vectorMinus, playerY, PLAYER2_SYMBOL);
-                } else {
+                }
+                if (vectorPlus <= vectorMinus && playerX - vectorPlus >= 0) {
                     b = setSymbol(playerX + vectorPlus, playerY, PLAYER2_SYMBOL);
                 }
                 break;
