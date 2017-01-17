@@ -107,6 +107,7 @@ public class Field extends JPanel {
         boolean b = false;
         int vectorPlus = 0;
         int vectorMinus = 0;
+        int x, y;
         switch (think(playerX, playerY)) {
             case 0: {
                 do {
@@ -119,9 +120,17 @@ public class Field extends JPanel {
                 } while ((playerX - vectorMinus) != -1);
                 if (vectorPlus > vectorMinus && playerX - vectorMinus >= 0) {
                     b = setSymbol(playerX - vectorMinus, playerY, PLAYER2_SYMBOL);
-                }
-                if (vectorPlus <= vectorMinus && playerX - vectorPlus >= 0) {
-                    b = setSymbol(playerX + vectorPlus, playerY, PLAYER2_SYMBOL);
+                } else {
+                    if (vectorPlus <= vectorMinus && playerX + vectorPlus < map.length) {
+                        b = setSymbol(playerX + vectorPlus, playerY, PLAYER2_SYMBOL);
+                    } else {
+                        for (int i = 0; i < map.length; i++) {
+                            if (setSymbol(i, playerY, PLAYER2_SYMBOL)) {
+                                b = true;
+                                break;
+                            }
+                        }
+                    }
                 }
                 break;
             }
@@ -137,8 +146,18 @@ public class Field extends JPanel {
                 if (vectorPlus > vectorMinus && playerY - vectorMinus >= 0) {
                     b = setSymbol(playerX, playerY - vectorMinus, PLAYER2_SYMBOL);
                 } else {
-                    b = setSymbol(playerX, playerY + vectorPlus, PLAYER2_SYMBOL);
+                    if (vectorPlus <= vectorMinus && playerY + vectorPlus < map.length) {
+                        b = setSymbol(playerX, playerY + vectorPlus, PLAYER2_SYMBOL);
+                    } else {
+                        for (int i = 0; i < map.length; i++) {
+                            if (setSymbol(playerX, i, PLAYER2_SYMBOL)) {
+                                b = true;
+                                break;
+                            }
+                        }
+                    }
                 }
+
                 break;
             }
             case 2: {
@@ -153,7 +172,32 @@ public class Field extends JPanel {
                 if (vectorPlus > vectorMinus && playerX - vectorMinus >= 0 && playerY - vectorMinus >= 0) {
                     b = setSymbol(playerX - vectorMinus, playerY - vectorMinus, PLAYER2_SYMBOL);
                 } else {
-                    b = setSymbol(playerX + vectorPlus, playerY + vectorPlus, PLAYER2_SYMBOL);
+                    if (vectorPlus <= vectorMinus && playerX + vectorPlus < map.length && playerY + vectorPlus < map.length) {
+                        b = setSymbol(playerX + vectorPlus, playerY + vectorPlus, PLAYER2_SYMBOL);
+                    } else {
+                        if (playerX - 1 < 0) {
+                            x = 0;
+                        } else {
+                            x = playerX - 1;
+                        }
+                        if (playerY - 1 < 0) {
+                            y = 0;
+                        } else {
+                            y = playerY - 1;
+                        }
+                        b = true;
+                        do {
+                            if (setSymbol(x, y, PLAYER2_SYMBOL)) {
+                                break;
+                            }
+                            x++;
+                            y++;
+                            if (x == map.length || y == map.length) {
+                                b = false;
+                                break;
+                            }
+                        } while (true);
+                    }
                 }
                 break;
             }
@@ -169,19 +213,42 @@ public class Field extends JPanel {
                 if (vectorPlus > vectorMinus && playerX - vectorMinus >= 0 && playerY + vectorMinus < map.length) {
                     b = setSymbol(playerX - vectorMinus, playerY + vectorMinus, PLAYER2_SYMBOL);
                 } else {
-                    b = setSymbol(playerX + vectorPlus, playerY - vectorPlus, PLAYER2_SYMBOL);
+                    if (vectorPlus <= vectorMinus && playerX + vectorPlus < map.length && playerY - vectorPlus >= 0) {
+                        b = setSymbol(playerX + vectorPlus, playerY - vectorPlus, PLAYER2_SYMBOL);
+                    } else {
+                        if (playerX - 1 < 0) {
+                            x = 0;
+                        } else {
+                            x = playerX - 1;
+                        }
+                        if (playerY + 1 >= map.length) {
+                            y = map.length - 1;
+                        } else {
+                            y = playerY + 1;
+                        }
+                        b = true;
+                        do {
+                            if (setSymbol(x, y, PLAYER2_SYMBOL)) {
+                                break;
+                            }
+                            x++;
+                            y--;
+                            if (x == map.length || y == -1) {
+                                b = false;
+                                break;
+                            }
+                        } while (true);
+                    }
                 }
                 break;
             }
             default: {
-                do {
-                } while (!setSymbol(rnd.nextInt(linesCount), rnd.nextInt(linesCount), PLAYER2_SYMBOL));
+                setSymbol(rnd.nextInt(linesCount), rnd.nextInt(linesCount), PLAYER2_SYMBOL);
                 break;
             }
         }
         if (!b) {
-            do {
-            } while (!setSymbol(rnd.nextInt(linesCount), rnd.nextInt(linesCount), PLAYER2_SYMBOL));
+            setSymbol(rnd.nextInt(linesCount), rnd.nextInt(linesCount), PLAYER2_SYMBOL);
         }
         repaint();
         isMapFull();
