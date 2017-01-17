@@ -32,14 +32,11 @@ public class Field extends JPanel {
                 super.mouseReleased(e);
                 if (aiOn) {
                     playerTurn(PLAYER1_SYMBOL, e);
-                    aiTurn();
                 } else {
                     if (player1) {
                         playerTurn(PLAYER1_SYMBOL, e);
-                        player1 = !player1;
                     } else {
                         playerTurn(PLAYER2_SYMBOL, e);
-                        player1 = !player1;
                     }
                 }
             }
@@ -54,6 +51,11 @@ public class Field extends JPanel {
                 repaint();
                 isMapFull();
                 checkWin(playerSymbol);
+                if (aiOn){
+                    aiTurn();
+                } else {
+                    player1 = !player1;
+                }
             }
         }
     }
