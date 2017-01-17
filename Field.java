@@ -107,7 +107,8 @@ public class Field extends JPanel {
         boolean b = false;
         int vectorPlus = 0;
         int vectorMinus = 0;
-        int x, y;
+        int x = playerX;
+        int y = playerY;
         switch (think(playerX, playerY)) {
             case 0: {
                 do {
@@ -157,7 +158,6 @@ public class Field extends JPanel {
                         }
                     }
                 }
-
                 break;
             }
             case 2: {
@@ -175,25 +175,20 @@ public class Field extends JPanel {
                     if (vectorPlus <= vectorMinus && playerX + vectorPlus < map.length && playerY + vectorPlus < map.length) {
                         b = setSymbol(playerX + vectorPlus, playerY + vectorPlus, PLAYER2_SYMBOL);
                     } else {
-                        if (playerX - 1 < 0) {
-                            x = 0;
-                        } else {
-                            x = playerX - 1;
+                        for (int i = 0; i < map.length; i++) {
+                            x = playerX - i;
+                            y = playerY - i;
+                            if (x < 0 || y < 0) break;
                         }
-                        if (playerY - 1 < 0) {
-                            y = 0;
-                        } else {
-                            y = playerY - 1;
-                        }
-                        b = true;
                         do {
-                            if (setSymbol(x, y, PLAYER2_SYMBOL)) {
-                                break;
-                            }
                             x++;
                             y++;
                             if (x == map.length || y == map.length) {
                                 b = false;
+                                break;
+                            }
+                            if (setSymbol(x, y, PLAYER2_SYMBOL)) {
+                                b = true;
                                 break;
                             }
                         } while (true);
@@ -216,25 +211,20 @@ public class Field extends JPanel {
                     if (vectorPlus <= vectorMinus && playerX + vectorPlus < map.length && playerY - vectorPlus >= 0) {
                         b = setSymbol(playerX + vectorPlus, playerY - vectorPlus, PLAYER2_SYMBOL);
                     } else {
-                        if (playerX - 1 < 0) {
-                            x = 0;
-                        } else {
-                            x = playerX - 1;
+                        for (int i = 0; i < map.length; i++) {
+                            x = playerX - i;
+                            y = playerY + i;
+                            if (x < 0 || y == map.length) break;
                         }
-                        if (playerY + 1 >= map.length) {
-                            y = map.length - 1;
-                        } else {
-                            y = playerY + 1;
-                        }
-                        b = true;
                         do {
-                            if (setSymbol(x, y, PLAYER2_SYMBOL)) {
-                                break;
-                            }
                             x++;
                             y--;
                             if (x == map.length || y == -1) {
                                 b = false;
+                                break;
+                            }
+                            if (setSymbol(x, y, PLAYER2_SYMBOL)) {
+                                b = true;
                                 break;
                             }
                         } while (true);
