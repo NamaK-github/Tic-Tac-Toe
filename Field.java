@@ -338,11 +338,11 @@ public class Field extends JPanel {
 
         }
         if (gameOver) {
-            g.setColor(Color.lightGray);
-            g.fillRect(0, 225, FIELD_SIZE, 40);
             Font f = new Font("Arial", Font.BOLD, 30);
             g.setFont(f);
             FontMetrics metr = getFontMetrics(f);
+            g.setColor(Color.lightGray);
+            g.fillRect((FIELD_SIZE - metr.stringWidth(gameOverMsg)) / 2 - 20, 225, metr.stringWidth(gameOverMsg) + 40, 40);
             g.setColor(Color.BLACK);
             g.drawString(gameOverMsg, (FIELD_SIZE - metr.stringWidth(gameOverMsg)) / 2 + 3, 258);
             g.setColor(Color.YELLOW);
